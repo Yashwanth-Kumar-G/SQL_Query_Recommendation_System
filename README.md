@@ -12,7 +12,7 @@ This project is a comprehensive Social Media Database Management System designed
 
 * [Database Schema](#Database-Schema)
 
-* [Relationship Query Types](#Relationship-Query-Types)
+* [Results](#Results)
 
 * [Contributing](#Contributing)
 
@@ -69,134 +69,12 @@ Upon launching the application, you will be presented with a dashboard.
 
 * Select an existing table from the dropdown to view, edit, or delete its records.
 
-* **Relationship Queries:**
+* **Results:**
 
-* Choose a query type (e.g., "Person's Friends").
+These screenshots showcase the Social Media Database Management System's key features: Table Management (viewing and managing STDNT1, STDNT2, and CELEBRITIES tables), the Create New Table interface (for defining custom tables with column types), and the Relationship Query Engine (demonstrating "Person's Friends" query execution and results). The UI features a clean dashboard layout with sidebar navigation.
 
-* Provide the necessary input (e.g., a person's ID).
 
-* Click "Execute Query" to see the results.
 
-## Database Schema
-
-The system simulates a social media database with the following mock tables:
-
-### `stdnts1`
-
-| Column Name | Type | Description |
-| ----- | ----- | ----- |
-| `id` | `number` | Unique identifier for the student. |
-| `name` | `string` | Name of the student. |
-| `frnd_id` | `number` | ID of a friend, used to group friends. |
-| `interest` | `string` | Primary interest of the student. |
-
-### `stdnts2`
-
-| Column Name | Type | Description |
-| ----- | ----- | ----- |
-| `id` | `number` | Unique identifier for the student. |
-| `name` | `string` | Name of the student. |
-| `frnd_id` | `number` | ID of a friend, used to group friends. |
-| `interest` | `string` | Primary interest of the student. |
-
-### `celebrities`
-
-| Column Name | Type | Description |
-| ----- | ----- | ----- |
-| `id` | `number` | Unique identifier for the celebrity. |
-| `name` | `string` | Name of the celebrity. |
-| `frnd_id` | `number` | ID of a friend, used to group friends. |
-| `interest` | `string` | Primary interest of the celebrity. |
-
-## Relationship Query Types
-
-The application implements the following relationship queries based on the provided SQL documentation:
-
-1. **Person's Friends:**
-
-* **Input:** `personId` (from `stdnts1` or `stdnts2`)
-
-* **Logic:** Finds all other individuals who share the same `frnd_id` as the specified `personId`. This effectively identifies a "friend group."
-
-* **Example SQL Concept:**
-
-  ```
-  SELECT T2.name
-  FROM stdnts1 T1
-  JOIN stdnts2 T2 ON T1.frnd_id = T2.frnd_id
-  WHERE T1.id = [personId] AND T2.id != [personId];
-  
-  ```
-
-2. **Friend of a Friend:**
-
-* **Input:** `personId` (from `stdnts1` or `stdnts2`)
-
-* **Logic:** First, identifies the direct friends of the `personId` (using the `frnd_id` logic). Then, for each of these direct friends, it finds their friends (again, based on `frnd_id`), excluding the original `personId` and their direct friends.
-
-* **Example SQL Concept:**
-
-  ```
-  WITH Friends AS (
-      SELECT T2.id as friend_id
-      FROM stdnts1 T1
-      JOIN stdnts2 T2 ON T1.frnd_id = T2.frnd_id
-      WHERE T1.id = [personId] AND T2.id != [personId]
-  )
-  SELECT T3.name
-  FROM Friends F
-  JOIN stdnts2 T2 ON F.friend_id = T2.id
-  JOIN stdnts1 T3 ON T2.frnd_id = T3.frnd_id
-  WHERE T3.id != [personId] AND T3.id NOT IN (SELECT friend_id FROM Friends);
-  
-  ```
-
-  (Note: The actual implementation might join across `stdnts1` and `stdnts2` or within the same table depending on the data distribution.)
-
-3. **Interests-based Suggestions:**
-
-* **Input:** `personId` (from `stdnts1` or `stdnts2`)
-
-* **Logic:** Finds other individuals (from `stdnts1`, `stdnts2`, or `celebrities`) who share the same `interest` as the specified `personId`, excluding the person themselves.
-
-* **Example SQL Concept:**
-
-  ```
-  SELECT T2.name
-  FROM stdnts1 T1
-  JOIN (SELECT * FROM stdnts1 UNION ALL SELECT * FROM stdnts2 UNION ALL SELECT * FROM celebrities) T2
-  ON T1.interest = T2.interest
-  WHERE T1.id = [personId] AND T2.id != [personId];
-  
-  ```
-
-4. **"You May Like" Recommendations:**
-
-* **Input:** `personId` (from `stdnts1` or `stdnts2`)
-
-* **Logic:** First, identifies the direct friends of the `personId`. Then, it finds all unique `interest` values among these direct friends. Finally, it suggests individuals (from `stdnts1`, `stdnts2`, or `celebrities`) who share any of these interests, excluding the original `personId` and their direct friends.
-
-* **Example SQL Concept:**
-
-  ```
-  WITH FriendsInterests AS (
-      SELECT DISTINCT T2.interest
-      FROM stdnts1 T1
-      JOIN stdnts2 T2 ON T1.frnd_id = T2.frnd_id
-      WHERE T1.id = [personId] AND T2.id != [personId]
-  ),
-  DirectFriends AS (
-      SELECT T2.id as friend_id
-      FROM stdnts1 T1
-      JOIN stdnts2 T2 ON T1.frnd_id = T2.frnd_id
-      WHERE T1.id = [personId] AND T2.id != [personId]
-  )
-  SELECT T3.name
-  FROM (SELECT * FROM stdnts1 UNION ALL SELECT * FROM stdnts2 UNION ALL SELECT * FROM celebrities) T3
-  JOIN FriendsInterests FI ON T3.interest = FI.interest
-  WHERE T3.id != [personId] AND T3.id NOT IN (SELECT friend_id FROM DirectFriends);
-  
-  ```
 
 ## Contributing
 
