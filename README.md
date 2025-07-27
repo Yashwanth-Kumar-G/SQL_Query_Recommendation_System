@@ -1,4 +1,4 @@
-# Social Media Database Management System
+# SQL Query Recommendation System
 
 This project is a comprehensive Social Media Database Management System designed to simulate and manage social media relationships and data. It provides an interactive interface for table management (CRUD operations) and specialized relationship query types, offering insights into social connections.
 
