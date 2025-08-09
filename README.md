@@ -69,6 +69,12 @@ Upon launching the application, you will be presented with a dashboard.
 
 * Select an existing table from the dropdown to view, edit, or delete its records.
 
+## Database Schema
+
+This is the mock database that is used as a simple storage unit to keep all the people's data.
+
+![Mock DB](/img/mockdb.png)
+
 ## Results
 
 These screenshots showcase the Social Media Database Management System's key features: Table Management (viewing and managing STDNT1, STDNT2, and CELEBRITIES tables), the Create New Table interface (for defining custom tables with column types), and the Relationship Query Engine (demonstrating "Person's Friends" query execution and results). The UI features a clean dashboard layout with sidebar navigation.
@@ -78,8 +84,7 @@ These screenshots showcase the Social Media Database Management System's key fea
 ![Queries](/img/queries.png)
 
 
-
-
 ## Contributing
 
 Contributions are welcome! If you have suggestions for improvements or new features, please feel free to open an issue or submit a pull request.
+
